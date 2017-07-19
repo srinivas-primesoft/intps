@@ -46,10 +46,9 @@ public class CustomConsumer {
      * initializes.
      * 
      * @param fileName
-     *            is the file to be created, if it already exists it deletes then
-     *            creates.
+     *            is the properties file that is to be read.
      * 
-     * @return false if fails on file loading/reading otherwise true
+     * @throws FileNotFoundException, IOException
      */
     public void initializeProperties(String fileName) throws FileNotFoundException, IOException {
 	FileInputStream fileInput;
@@ -80,20 +79,5 @@ public class CustomConsumer {
 	topicConsumer.startConsumer();
 
     }
-
-    /*
-     * public static void main(String[] args) { System.out.
-     * println("############ Custom consumer application starting. ############");
-     * try { CustomConsumer consumer = new CustomConsumer();
-     * consumer.startSparkContextConsumer(); System.out.
-     * println("############ Custom consumer application started. ############"); }
-     * catch (FileNotFoundException e) { System.out.println(
-     * "############ Cannot start the consumer application as the properties file is not visible ############"
-     * ); System.exit(1); } catch (IOException e) { System.out.println(
-     * "############ Cannot start the consumer application as the properties file cannot be read, check permissions on the file ############"
-     * ); System.exit(2); }
-     * 
-     * }
-     */
 
 }

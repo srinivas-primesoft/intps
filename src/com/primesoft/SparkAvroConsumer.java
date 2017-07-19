@@ -205,7 +205,7 @@ public class SparkAvroConsumer {
      * 
      */
     public static void saveAsJsonFile(String inputFileName, String jsonFileName){
-        String line = null;
+        String line;
         String fileContent = "";
         try {
             FileReader fileReader = new FileReader(inputFileName);

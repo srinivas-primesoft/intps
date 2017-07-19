@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -48,13 +47,13 @@ public class ElasticSearchManager implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger appLogger = LoggerFactory.getLogger(ElasticSearchManager.class);
 	private static final String tableName = "olm_subproduct"; //for demo purpose hard coded to be read from mapping file
-	private static String elasticSearchURL = null;
+	private static String elasticSearchURL;
 	private static final String sqlUpdateAction = "UPDATE";
 	private static final String primaryKey ="COD_SUBPROD";
 	private static final String payLoad ="payload";
-	Properties configProperties = null;
-	String elasticSearchHost = null;
-	HttpClient httpClient = null;
+	Properties configProperties;
+	String elasticSearchHost;
+	HttpClient httpClient;
 	
 	/**
      * Constructor. 
@@ -84,7 +83,7 @@ public class ElasticSearchManager implements Serializable {
     	Map<String,String> recordData = getRecordDataMap(payLoadData);
 	    if (!recordData.isEmpty()) {
 	    	String actionType = recordData.get("TYPE");
-	    	if (actionType.equalsIgnoreCase(sqlUpdateAction)) {
+	    	if (sqlUpdateAction.equalsIgnoreCase(actionType)) {
 	    		String indexVal = getRecordIndex(recordData.get(primaryKey));
 	    		if (indexVal.isEmpty()) {
 	    			appLogger.error("Failed to retrieve existing record information for update action.");
@@ -93,7 +92,7 @@ public class ElasticSearchManager implements Serializable {
 	    		url = url+indexVal;
 	    	}
 	    	String response = sendPostRequest(url, payLoadData.toString());
-	    	if(!response.equals(null)) {
+	    	if(response != null) {
 	    		appLogger.info("Post request response :"+response);
 	    	}
     	}	    	        				
@@ -119,8 +118,8 @@ public class ElasticSearchManager implements Serializable {
 			return null;
 		}	    
 	    
-		HttpResponse response = null;
-		BufferedReader rd = null;
+		HttpResponse response;
+		BufferedReader rd;
 		StringBuffer result = new StringBuffer();
 		String line = "";
 		try {
@@ -152,7 +151,7 @@ public class ElasticSearchManager implements Serializable {
     	// Url is hard coded with primary key for demo purpose
     	String url = elasticSearchURL+ "_search?q=NBR_STRCID="+primaryKeyValue;
     	String response = sendGetRequest(url);
-    	if(!response.equals(null)) {
+    	if(response != null) {
     		appLogger.info("Get request response :"+response);    		
     		String idValue = response.substring(response.indexOf("\"_id\":\"")+7);
     		indexValue = idValue.substring(0, idValue.indexOf("\""));
@@ -171,8 +170,8 @@ public class ElasticSearchManager implements Serializable {
     	HttpGet  getRequest = new HttpGet(url);
     	getRequest.addHeader("User-Agent", "Mozilla/5.0");
 	    
-		HttpResponse response = null;
-		BufferedReader rd = null;
+		HttpResponse response;
+		BufferedReader rd;
 		StringBuffer result = new StringBuffer();
 		String line = "";
 		try {
@@ -209,14 +208,6 @@ public class ElasticSearchManager implements Serializable {
             recordData.put(key, payLoadData.get(key).toString());
             appLogger.info("Key :"+key+ "     Value :"+payLoadData.get(key).toString());
         }
-        
-//    	HashMap<String,String> recordData = new HashMap<String,String>();  
-//    	String[] payLoadData = data.split(",");
-//    	for(int index=0; index < payLoadData.length; index++) {
-//    		String[] keyValue = payLoadData[index].split(":");
-//    		appLogger.info("Key :"+keyValue[0]+ "     Value :"+keyValue[1]);
-//    		recordData.put(keyValue[0].replace("\"","").trim(), keyValue[1].replace("\"","").trim());
-//    	}    	
     	return recordData;
     }
 }
