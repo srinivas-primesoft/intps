@@ -52,6 +52,9 @@ We need winutil.exe though we are not using hadoop
   https://issues.apache.org/jira/browse/SPARK-2356
   set HADOOP_HOME/HADOOP_CONF
 
+#Command to start Elasticsearch
+sudo service elasticsearch start
+
 
 
 
